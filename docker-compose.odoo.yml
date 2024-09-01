@@ -1,0 +1,30 @@
+
+version: '3.8'
+
+services:
+  odoo:
+    image: ghizlanera/odoo-custom
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_DB=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+    ports:
+      - "8328:8069"
+    restart: always
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: postgres
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  odoo-db-data:

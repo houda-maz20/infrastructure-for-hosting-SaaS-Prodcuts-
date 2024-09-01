@@ -1,0 +1,17 @@
+---
+- name: Build and run Docker container
+  hosts: localhost
+  connection: local
+  vars:
+    container_port: 8080
+    container_name: my-nginx-container
+  tasks:
+
+    - name: Build Docker image from Dockerfile
+      command: docker build -t my-nginx-image .
+      args:
+        chdir: /home/houda/dockerImages
+
+    - name: Run container from my-nginx-image
+      command: docker run -d --name "{{ container_name }}" -p "{{ container_port }}:80" my-nginx-image
+

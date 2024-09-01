@@ -1,0 +1,13 @@
+FROM ghizlanera/odoo-custom
+
+# Configuration pour l'instance PostgreSQL (base de données)
+ENV POSTGRES_USER=odoo
+ENV POSTGRES_PASSWORD=odoo
+ENV POSTGRES_DB=postgres
+ENV DB_HOST=db
+ENV DB_PORT=5432
+
+EXPOSE 8069
+
+# Commande pour démarrer Odoo
+CMD ["odoo", "-c", "/etc/odoo/odoo.conf"]
