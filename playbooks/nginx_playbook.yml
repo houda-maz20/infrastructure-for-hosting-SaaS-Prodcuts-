@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Run Nginx container
+      docker_container:
+        name: "nginx_container_{{ next_port }}"
+        image: "{{ image_name }}"
+        state: started
+        ports:
+          - "{{ port }}:80"

@@ -1,0 +1,31 @@
+# odoo_postgres_playbook.yml
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Run PostgreSQL container
+      docker_container:
+        name: "postgres_container"
+        image: "postgres:13"
+        state: started
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_USER: "odoo"
+          POSTGRES_PASSWORD: "odoo"
+          POSTGRES_DB: "postgres"
+
+    - name: Run Odoo container
+      docker_container:
+        name: "odoo_container_{{ next_port }}"
+        image: "ghizlanera/odoo-custom:latest"
+        state: started
+        ports:
+          - "{{ port }}:8069"
+        env:
+          POSTGRES_USER: "odoo"
+          POSTGRES_PASSWORD: "odoo"
+          POSTGRES_DB: "postgres"
+          DB_HOST: "postgres_container"  # Utilise le nom du conteneur PostgreSQL
+        links:
+          - "postgres_container:db"  # Lien vers le conteneur PostgreSQL avec alias 'db'
