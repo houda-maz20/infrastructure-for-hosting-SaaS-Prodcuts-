@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Container Management</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #1a1a1a;
+            color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffc107;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-size: 1.2rem;
+            margin: 15px 0 5px;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: #ffc107;
+        }
+
+        select {
+            padding: 10px;
+            background: #333;
+            color: #f1f1f1;
+            border: 2px solid #ffc107;
+            border-radius: 5px;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 5px;
+            transition: background 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            background: #444;
+        }
+
+        button {
+            background: #ffc107;
+            color: #1a1a1a;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            display: block;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #e0a800;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            background: #c69500;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Run Containers</h1>
+        
+        <label for="container_type_nginx">
+            <input type="radio" id="container_type_nginx" name="container_type" value="nginx">Nginx
+        </label>
+        
+        <label for="container_type_odoo">
+            <input type="radio" id="container_type_odoo" name="container_type" value="odoo">Odoo
+        </label>
+        
+        <br><br>
+        
+        <label for="period">Run for:</label>
+        <select id="period" name="period">
+            <option value="1d">1 Day</option>
+            <option value="1w">1 Week</option>
+            <option value="1m">1 Month</option>
+        </select>
+        
+        <br><br>
+        
+        <button onclick="runContainer()">Run Container</button>
+        
+        <div id="message"></div>
+    </div>
+    
+    <script>
+    function runContainer() {
+        let containerType = document.querySelector('input[name="container_type"]:checked').value;
+        let period = document.getElementById('period').value;
+
+        fetch(`/run-containers?type=${containerType}&period=${period}`, {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            let messageElement = document.getElementById('message');
+            messageElement.innerText = data.message;
+            messageElement.style.backgroundColor = response.ok ? '#4caf50' : '#f44336';  // Green for success, red for error
+        });
+    }
+    </script>
+</body>
+</html>
